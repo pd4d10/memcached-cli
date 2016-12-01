@@ -1,0 +1,13 @@
+{
+  "name": "memcached-cli",
+  "version": "1.0.0",
+  "description": "Memcached CLI",
+  "main": "index.js",
+  "repository": "https://github.com/pd4d10/memcached-cli.git",
+  "author": "pd4d10 <pd4d10@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^1.2.3",
+    "memjs": "^0.10.0"
+  }
+}
