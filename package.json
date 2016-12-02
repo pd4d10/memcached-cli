@@ -13,8 +13,9 @@
   "author": "pd4d10 <pd4d10@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "inquirer": "^1.2.3",
-    "memjs": "^0.10.0"
+    "co": "^4.6.0",
+    "memjs": "^0.10.0",
+    "vorpal": "^1.11.4"
   },
   "devDependencies": {
     "eslint": "^3.11.1",
