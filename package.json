@@ -3,11 +3,33 @@
   "version": "1.0.0",
   "description": "Memcached CLI",
   "main": "index.js",
+  "bin": {
+    "memcached-cli": "index.js"
+  },
+  "files": [
+    "index.js"
+  ],
   "repository": "https://github.com/pd4d10/memcached-cli.git",
   "author": "pd4d10 <pd4d10@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "inquirer": "^1.2.3",
     "memjs": "^0.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.11.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.1.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.6.0"
+  },
+  "eslintConfig": {
+    "extends": "airbnb",
+    "rules": {
+      "semi": [
+        "error",
+        "never"
+      ]
+    }
   }
 }
