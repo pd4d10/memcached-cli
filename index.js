@@ -35,7 +35,7 @@ function getCommand(method) {
     case 'delete':
       return {
         command: `${method} <key>`,
-        query: args => cb => client[method](args.key, cb),
+        query: args => cb => client[method](args.key.toString(), cb),
       }
 
     // key, value, expires(optional)
@@ -44,7 +44,7 @@ function getCommand(method) {
     case 'replace':
       return {
         command: `${method} <key> <value> [expires]`,
-        query: args => cb => client[method](args.key, args.value, cb, args.expires),
+        query: args => cb => client[method](args.key.toString(), args.value.toString(), cb, Number(args.expires) || 0), // eslint-disable-line
       }
 
     // key, amount, expires(optional)
@@ -52,7 +52,7 @@ function getCommand(method) {
     case 'decrement':
       return {
         command: `${method} <key> <amount> [expires]`,
-        query: args => cb => client[method](args.key, args.value, cb, args.expires),
+        query: args => cb => client[method](args.key.toString(), args.value.toString(), cb, Number(args.expires) || 0), // eslint-disable-line
       }
     default:
       throw new Error(`\`${method}\` is not supported`)
@@ -96,15 +96,17 @@ function getParse(method) {
 // Register all methods to vorpal
 METHODS.forEach((method) => {
   const opt = getCommand(method)
+  const command = opt.command
+  const query = opt.query
   const description = METHOD_DESCRIPTION[method]
   const parse = getParse(method)
 
   vorpal
-    .command(opt.command)
+    .command(command)
     .description(description)
     .action(function action(args) {
       return co(function* wrap() {
-        return yield opt.query(args)
+        return yield query(args)
       })
         .then(data => this.log(parse(data)))
         .catch(err => this.log(err))
