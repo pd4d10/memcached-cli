@@ -61,7 +61,7 @@ Show statistics
 
 `> stats`
 
-`memcached-cli` is built upon `memjs`, Visit [memjs documentation](http://alevy.github.io/memjs/) for more information.
+`memcached-cli` is built upon `memjs`. Visit [memjs documentation](http://alevy.github.io/memjs/) for more information.
 
 ## License
 

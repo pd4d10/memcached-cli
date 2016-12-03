@@ -2,7 +2,15 @@ const co = require('co')
 const memjs = require('memjs')
 const vorpal = require('vorpal')()
 
-const client = memjs.Client.create()
+const server = process.argv[2] || 'localhost:11211'
+const client = memjs.Client.create(server)
+
+// HACK
+// memjs does not throw error even if connection failed
+// so trigger get method once to check it
+client.get('0', (err) => {
+  if (err) throw new Error(`Fail to connect to ${server}`)
+})
 
 const METHOD_DESCRIPTION = {
   get: 'Get the value of a key',
@@ -74,7 +82,7 @@ function getParse(method) {
       }
     case 'stats':
       return (arr) => {
-        const server = arr[0]
+        const serverInfo = arr[0]
         const result = arr[1]
 
         // Make STATS result more readable
@@ -84,7 +92,7 @@ function getParse(method) {
         }, [])
 
         // Add server info
-        data.unshift(`server ${server}`)
+        data.unshift(`server ${serverInfo}`)
         return data.join('\n')
       }
 
@@ -113,4 +121,18 @@ METHODS.forEach((method) => {
     })
 })
 
-vorpal.delimiter('memcached >').show()
+const PREFIX_MAX_LENGTH = 50
+
+// Use server address as CLI prefix, cut if too long
+function makePrefix(fullAddr) {
+  // remove 'username:password'
+  const addr = fullAddr.includes('@') ? fullAddr.split('@')[1] : fullAddr
+
+  if (server.length > PREFIX_MAX_LENGTH) {
+    return `${addr.slice(0, PREFIX_MAX_LENGTH - 3)}...>`
+  }
+
+  return `${addr}>`
+}
+
+vorpal.delimiter(makePrefix(server)).show()
