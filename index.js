@@ -4,63 +4,117 @@ const vorpal = require('vorpal')()
 
 const client = memjs.Client.create()
 
-const config = {
-  get: {
-    command: 'get <key>',
-    description: 'GET',
-  },
-  set: {
-    command: 'set <key> <value> [expires]',
-    description: 'SET',
-  },
-  add: {
-    command: 'add <key> <value> [expires]',
-    description: 'ADD',
-  },
-  replace: {
-    command: 'replace <key> <value> [expires]',
-    description: 'replace',
-  },
+const METHOD_DESCRIPTION = {
+  get: 'get',
+  set: 'set',
+  add: 'add',
+  replace: 'repalce',
+  delete: 'delete',
+  increment: 'increment',
+  decrement: 'decrement',
+  flush: 'flush',
+  stats: 'stats',
 }
 
-function parse(data) {
-  try {
-    return data.toString()
-  } catch (err) {
-    return data
+// Get all methods name
+const METHODS = Object.keys(METHOD_DESCRIPTION)
+
+function getCommand(method) {
+  switch (method) {
+    // No argument
+    case 'flush':
+    case 'stats':
+      return {
+        command: method,
+        query: () => cb => client[method](cb),
+      }
+
+    // One argument, key
+    case 'get':
+    case 'delete':
+      return {
+        command: `${method} <key>`,
+        query: args => cb => client[method](args.key, cb),
+      }
+
+    // key, value, expires(optional)
+    case 'set':
+    case 'add':
+    case 'replace':
+      return {
+        command: `${method} <key> <value> [expires]`,
+        query: args => cb => client[method](args.key, args.value, cb, args.expires),
+      }
+
+    // key, amount, expires(optional)
+    case 'increment':
+    case 'decrement':
+      return {
+        command: `${method} <key> <amount> [expires]`,
+        query: args => cb => client[method](args.key, args.value, cb, args.expires),
+      }
+    default:
+      throw new Error(`\`${method}\` is not supported`)
   }
 }
 
-const methods = Object.keys(config)
+// How to parse
+function getParse(method) {
+  switch (method) {
+    case 'get':
+      return (arr) => {
+        const value = arr[0]
+        const extra = arr[1]
 
-methods.forEach((method) => {
-  const option = config[method]
+        if (value === null) {
+          return null
+        }
 
-  vorpal
-    .command(option.command)
-    .description(option.description)
-    .action(function (args) {
-      let promise
+        return [
+          `value: ${value.toString()}`,
+          `extra: ${extra.toString()}`,
+        ].join('\n')
+      }
+    case 'stats':
+      return (arr) => {
+        const server = arr[0]
+        const result = arr[1]
 
-      switch (method) {
-        case 'get':
-          promise = co(function* () {
-            return yield cb => client.get(args.key, cb)
-          })
-          break
-        case 'set':
-        case 'add':
-        case 'replace':
-          promise = co(function* () {
-            return yield cb => client[method](args.key, args.value, cb, args.expires)
-          })
-          break
+        // Make STATS result more readable
+        const data = Object.keys(result).reduce((res, key) => {
+          res.push(`${key} ${arr[1][key]}`)
+          return res
+        }, [])
+
+        // Add server info
+        data.unshift(`server ${server}`)
+        return data.join('\n')
       }
 
-      return promise.then((data) => {
-        this.log(parse(data.toString()))
-        client.close()
-      })
+    default:
+      return arg => arg
+  }
+}
+
+function makePromise(fn) {
+  return co(function* wrap() {
+    return yield fn
+  })
+}
+
+// Register all methods to vorpal
+METHODS.forEach((method) => {
+  const opt = getCommand(method)
+  const description = METHOD_DESCRIPTION[method]
+  const parse = getParse(method)
+
+  vorpal
+    .command(opt.command)
+    .description(description)
+    .action(function action(args) {
+      return makePromise(opt.query(args))
+        .then(data => this.log(parse(data)))
+        .catch(err => this.log(err))
     })
 })
 

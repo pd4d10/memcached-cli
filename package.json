@@ -9,6 +9,9 @@
   "files": [
     "index.js"
   ],
+  "scripts": {
+    "test": "eslint **/*.js"
+  },
   "repository": "https://github.com/pd4d10/memcached-cli.git",
   "author": "pd4d10 <pd4d10@gmail.com>",
   "license": "MIT",
