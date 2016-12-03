@@ -5,15 +5,16 @@ const vorpal = require('vorpal')()
 const client = memjs.Client.create()
 
 const METHOD_DESCRIPTION = {
-  get: 'get',
-  set: 'set',
-  add: 'add',
-  replace: 'repalce',
-  delete: 'delete',
-  increment: 'increment',
-  decrement: 'decrement',
-  flush: 'flush',
-  stats: 'stats',
+  get: 'Get the value of a key',
+  set: 'Set the value of a key',
+  add: 'Set the value of a key, fail if key exists',
+  replace: 'Overwrite existing key, fail if key not exists',
+  delete: 'Delete a key',
+  // TODO Implement increment and decrement method
+  // increment: 'increment',
+  // decrement: 'decrement',
+  flush: 'Flush all',
+  stats: 'Show statistics',
 }
 
 // Get all methods name
@@ -64,16 +65,12 @@ function getParse(method) {
     case 'get':
       return (arr) => {
         const value = arr[0]
-        const extra = arr[1]
 
         if (value === null) {
           return null
         }
 
-        return [
-          `value: ${value.toString()}`,
-          `extra: ${extra.toString()}`,
-        ].join('\n')
+        return value.toString()
       }
     case 'stats':
       return (arr) => {
@@ -96,12 +93,6 @@ function getParse(method) {
   }
 }
 
-function makePromise(fn) {
-  return co(function* wrap() {
-    return yield fn
-  })
-}
-
 // Register all methods to vorpal
 METHODS.forEach((method) => {
   const opt = getCommand(method)
@@ -112,7 +103,9 @@ METHODS.forEach((method) => {
     .command(opt.command)
     .description(description)
     .action(function action(args) {
-      return makePromise(opt.query(args))
+      return co(function* wrap() {
+        return yield opt.query(args)
+      })
         .then(data => this.log(parse(data)))
         .catch(err => this.log(err))
     })
