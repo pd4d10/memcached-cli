@@ -13,7 +13,7 @@ const METHOD_DESCRIPTION = {
   // TODO Implement increment and decrement method
   // increment: 'increment',
   // decrement: 'decrement',
-  flush: 'Flush all',
+  flush: 'Flush all data',
   stats: 'Show statistics',
 }
 
