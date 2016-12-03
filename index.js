@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const co = require('co')
 const memjs = require('memjs')
 const vorpal = require('vorpal')()
