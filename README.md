@@ -17,7 +17,9 @@ yarn global add memcached-cli
 
 ## Usage
 
-Run `memcached-cli` to enter an interactive shell.
+Run `memcached-cli host:port` to enter interactive shell. If `host` and `port` is not specified, `localhost:11211` will be used.
+
+If you use SASL auth, run `memcached-cli username:password@host:port`.
 
 ### get
 
