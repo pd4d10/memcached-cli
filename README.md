@@ -20,7 +20,7 @@ yarn global add memcached-cli
 Run
 
 ```sh
-memcached-cli host:port
+> memcached-cli host:port
 ```
 
 to enter interactive shell. If `host` and `port` is not specified, `localhost:11211` will be used.
