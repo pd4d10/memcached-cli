@@ -19,7 +19,7 @@ yarn global add memcached-cli
 
 Run
 
-```
+```sh
 memcached-cli host:port
 ```
 
