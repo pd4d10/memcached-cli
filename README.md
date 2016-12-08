@@ -17,51 +17,29 @@ yarn global add memcached-cli
 
 ## Usage
 
-Run `memcached-cli host:port` to enter interactive shell. If `host` and `port` is not specified, `localhost:11211` will be used.
+Run
 
-If you use SASL auth, run `memcached-cli username:password@host:port`.
+```
+memcached-cli host:port
+```
 
-### get
+to enter interactive shell. If `host` and `port` is not specified, `localhost:11211` will be used.
 
-Get the value of a key
+If you use SASL auth, run
 
-`> get <key>`
+```sh
+> memcached-cli username:password@host:port
+```
 
-### set
-
-Set the value of a key, default expires(s) is 0
-
-`> set <key> <value> [expires]`
-
-### add
-
-Set the value of a key, fail if key exists
-
-`> add <key> <value> [expires]`
-
-### replace
-
-Overwrite existing key, fail if key not exists
-
-`> replace <key> <value> [expires]`
-
-### delete
-
-Delete a key
-
-`> delete <key>`
-
-### flush
-
-Flush all data
-
-`> flush`
-
-### stats
-
-Show statistics
-
-`> stats`
+Method | Description | Command
+---|---|---
+get | Get the value of a key | `> get <key>`
+set | Set the value of a key, default expires(s) is 0 | `> set <key> <value> [expires]`
+add | Set the value of a key, fail if key exists | `> add <key> <value> [expires]`
+replace | Overwrite existing key, fail if key not exists | `> replace <key> <value> [expires]`
+delete | Delete a key | `> delete <key>`
+flush | Flush all data | `> flush`
+stats | Show statistics | `> stats`
 
 `memcached-cli` is built upon `memjs`. Visit [memjs documentation](http://alevy.github.io/memjs/) for more information.
 
