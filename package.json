@@ -10,7 +10,7 @@
     "index.js"
   ],
   "scripts": {
-    "test": "eslint **/*.js"
+    "test": "npx prettier --list-different"
   },
   "repository": "https://github.com/pd4d10/memcached-cli.git",
   "author": "Rongjian Zhang <pd4d10@gmail.com>",

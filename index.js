@@ -10,7 +10,7 @@ const client = memjs.Client.create(server)
 // HACK
 // memjs does not throw error even if connection failed
 // so trigger get method once to check it
-client.get('0', (err) => {
+client.get('0', err => {
   if (err) throw new Error(`Fail to connect to ${server}`)
 })
 
@@ -54,7 +54,13 @@ function getCommand(method) {
     case 'replace':
       return {
         command: `${method} <key> <value> [expires]`,
-        query: args => cb => client[method](args.key.toString(), args.value.toString(), cb, Number(args.expires) || 0), // eslint-disable-line
+        query: args => cb =>
+          client[method](
+            args.key.toString(),
+            args.value.toString(),
+            cb,
+            Number(args.expires) || 0,
+          ), // eslint-disable-line
       }
 
     // key, amount, expires(optional)
@@ -62,7 +68,13 @@ function getCommand(method) {
     case 'decrement':
       return {
         command: `${method} <key> <amount> [expires]`,
-        query: args => cb => client[method](args.key.toString(), args.value.toString(), cb, Number(args.expires) || 0), // eslint-disable-line
+        query: args => cb =>
+          client[method](
+            args.key.toString(),
+            args.value.toString(),
+            cb,
+            Number(args.expires) || 0,
+          ), // eslint-disable-line
       }
     default:
       throw new Error(`\`${method}\` is not supported`)
@@ -73,7 +85,7 @@ function getCommand(method) {
 function getParse(method) {
   switch (method) {
     case 'get':
-      return (arr) => {
+      return arr => {
         const value = arr[0]
 
         if (value === null) {
@@ -83,7 +95,7 @@ function getParse(method) {
         return value.toString()
       }
     case 'stats':
-      return (arr) => {
+      return arr => {
         const serverInfo = arr[0]
         const result = arr[1]
 
@@ -104,7 +116,7 @@ function getParse(method) {
 }
 
 // Register all methods to vorpal
-METHODS.forEach((method) => {
+METHODS.forEach(method => {
   const opt = getCommand(method)
   const command = opt.command
   const query = opt.query
