@@ -1,6 +1,6 @@
 {
   "name": "memcached-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Memcached CLI",
   "main": "index.js",
   "bin": {
