@@ -1,6 +1,6 @@
 {
   "name": "memcached-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Memcached CLI",
   "main": "index.js",
   "bin": {
@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "co": "^4.6.0",
-    "memjs": "^1.2.0",
+    "memjs": "^1.2.2",
     "vorpal": "^1.12.0"
   }
 }
