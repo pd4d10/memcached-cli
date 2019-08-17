@@ -20,9 +20,8 @@ const METHOD_DESCRIPTION = {
   add: 'Set the value of a key, fail if key exists',
   replace: 'Overwrite existing key, fail if key not exists',
   delete: 'Delete a key',
-  // TODO Implement increment and decrement method
-  // increment: 'increment',
-  // decrement: 'decrement',
+  increment: 'increment',
+  decrement: 'decrement',
   flush: 'Flush all data',
   stats: 'Show statistics',
 }
@@ -58,8 +57,8 @@ function getCommand(method) {
           client[method](
             args.key.toString(),
             args.value.toString(),
+            {'expires': Number(args.expires) || 0},
             cb,
-            Number(args.expires) || 0,
           ), // eslint-disable-line
       }
 
@@ -71,9 +70,9 @@ function getCommand(method) {
         query: args => cb =>
           client[method](
             args.key.toString(),
-            args.value.toString(),
+            args.amount.toString(),
+            {'expires': Number(args.expires) || 0},
             cb,
-            Number(args.expires) || 0,
           ), // eslint-disable-line
       }
     default:
