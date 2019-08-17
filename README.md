@@ -1,6 +1,5 @@
 # memcached-cli
 
-[![build](https://travis-ci.org/pd4d10/memcached-cli.svg)](https://travis-ci.org/pd4d10/memcached-cli)
 [![npm](https://img.shields.io/npm/v/memcached-cli.svg)](https://www.npmjs.com/package/memcached-cli)
 
 A simple memcached CLI tool, with SASL supported. Built upon [`memjs`](https://github.com/alevy/memjs).
