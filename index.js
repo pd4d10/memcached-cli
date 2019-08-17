@@ -57,7 +57,7 @@ function getCommand(method) {
           client[method](
             args.key.toString(),
             args.value.toString(),
-            {'expires': Number(args.expires) || 0},
+            { expires: Number(args.expires) || 0 },
             cb,
           ), // eslint-disable-line
       }
@@ -71,7 +71,7 @@ function getCommand(method) {
           client[method](
             args.key.toString(),
             args.amount.toString(),
-            {'expires': Number(args.expires) || 0},
+            { expires: Number(args.expires) || 0 },
             cb,
           ), // eslint-disable-line
       }
