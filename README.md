@@ -29,15 +29,17 @@ If you use SASL auth, run
 > memcached-cli username:password@host:port
 ```
 
-| Method  | Description                                     | Command                             |
-| ------- | ----------------------------------------------- | ----------------------------------- |
-| get     | Get the value of a key                          | `> get <key>`                       |
-| set     | Set the value of a key, default expires(s) is 0 | `> set <key> <value> [expires]`     |
-| add     | Set the value of a key, fail if key exists      | `> add <key> <value> [expires]`     |
-| replace | Overwrite existing key, fail if key not exists  | `> replace <key> <value> [expires]` |
-| delete  | Delete a key                                    | `> delete <key>`                    |
-| flush   | Flush all data                                  | `> flush`                           |
-| stats   | Show statistics                                 | `> stats`                           |
+| Method    | Description                                     | Command                                |
+| --------- | ----------------------------------------------- | -------------------------------------- |
+| get       | Get the value of a key                          | `> get <key>`                          |
+| set       | Set the value of a key, default expires(s) is 0 | `> set <key> <value> [expires]`        |
+| add       | Set the value of a key, fail if key exists      | `> add <key> <value> [expires]`        |
+| replace   | Overwrite existing key, fail if key not exists  | `> replace <key> <value> [expires]`    |
+| increment | Increment the value of a key by amount          | `> increment <key> <amount> [expires]` |
+| decrement | Decrement the value of a key by amount          | `> decrement <key> <amount> [expires]` |
+| delete    | Delete a key                                    | `> delete <key>`                       |
+| flush     | Flush all data                                  | `> flush`                              |
+| stats     | Show statistics                                 | `> stats`                              |
 
 `memcached-cli` is built upon `memjs`. Visit [memjs documentation](https://memjs.netlify.com/) for more information.
 
